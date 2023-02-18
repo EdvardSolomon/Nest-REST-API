@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ForbiddenException } from '@nestjs/common/exceptions';
+import { Role } from '../user/models/role.enum';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreatePostDto } from './dto';
 import { EditPostDto } from './dto/edit-post.dto';
@@ -8,18 +9,22 @@ import { EditPostDto } from './dto/edit-post.dto';
 export class PostService {
     constructor(private prisma: PrismaService){}
 
-    getPosts(userId: number) {
-        return this.prisma.post.findMany({
-            where:{
-                userId,
-            }
-        })
+    getPosts() {
+        return this.prisma.post.findMany()
     }
 
     getPostById(userId: number, PostId: number) {
         return this.prisma.post.findFirst({
             where:{
                 id: PostId,
+                userId,
+            }
+        })
+    }
+
+    getPostsByAuthorId(userId: number) {
+        return this.prisma.post.findMany({
+            where:{
                 userId,
             }
         })
@@ -39,7 +44,7 @@ export class PostService {
         return post;
     }
 
-    async editPost(userId: number, postId: number, dto: EditPostDto) {
+    async editPost(userId: number, postId: number, dto: EditPostDto, role: string) {
 
         const post = await this.prisma.post.findUnique({
             where: {
@@ -47,7 +52,7 @@ export class PostService {
             },
         });
 
-        if(!post || post.userId !== userId) {
+        if(!post || post.userId !== userId && role !== Role.ADMIN) {
             throw new ForbiddenException("Acces to resource denied");
         }
 
@@ -61,7 +66,7 @@ export class PostService {
         })
     }
     
-    async deletePostById(userId: number, postId: number) {
+    async deletePostById(userId: number, postId: number, role: string) {
 
         const post = await this.prisma.post.findUnique({
             where: {
@@ -69,7 +74,7 @@ export class PostService {
             },
         });
 
-        if(!post || post.userId !== userId) {
+        if(!post || post.userId !== userId && role !== Role.ADMIN) {
             throw new ForbiddenException("Acces to resource denied");
         }
 

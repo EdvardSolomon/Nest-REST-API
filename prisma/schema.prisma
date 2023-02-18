@@ -20,6 +20,8 @@ model User{
 
   firstName String?
   lastName String?
+
+  role String @default("user")
   
   posts Post[]
 
@@ -36,7 +38,7 @@ model Post {
     link String
 
     userId Int
-    user User @relation(fields: [userId], references: [id])
+    user User @relation(fields: [userId], references: [id],  onDelete: Cascade)
 
 @@map("posts")
 }

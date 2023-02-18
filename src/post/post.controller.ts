@@ -13,10 +13,9 @@ export class PostController {
     constructor(private postService: PostService){}
 
     @Get()
-    getPosts(
-        @GetUser('id') userId: number
-    ){
-        return this.postService.getPosts(userId)
+    getPosts()
+    {
+        return this.postService.getPosts()
     }
 
     @Post()
@@ -35,21 +34,30 @@ export class PostController {
             return this.postService.getPostById(userId, postId)
         }
 
+    @Get('/author/:id')
+    getPostsByAuthorId(
+        @Param('id', ParseIntPipe) userId: number,
+        ){
+            return this.postService.getPostsByAuthorId(userId)
+        }
+
     @Patch(':id')
     editPost(
         @GetUser('id') userId: number,
+        @GetUser('role') role: string,
         @Param('id', ParseIntPipe) postId: number,
         @Body() dto: EditPostDto,
     ){
-        return this.postService.editPost(userId, postId, dto);
+        return this.postService.editPost(userId, postId, dto, role);
     }
 
     @HttpCode(HttpStatus.NO_CONTENT)
     @Delete(':id')
     deletePostById(
         @GetUser('id') userId: number,
+        @GetUser('role') role: string,
         @Param('id', ParseIntPipe) postId: number,
     ){
-        return this.postService.deletePostById(userId, postId)
+        return this.postService.deletePostById(userId, postId, role)
     }
 }

@@ -23,6 +23,8 @@ $ npm install
 
 ## Running the app
 
+Server listening 3333 port and Swagge documentation on http://localhost:3333/api.
+
 ```bash
 
 # watch dev mode

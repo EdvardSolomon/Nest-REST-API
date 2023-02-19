@@ -23,15 +23,21 @@ $ npm install
 
 ## Running the app
 
-Server listening 3333 port and Swagge documentation on http://localhost:3333/api.
+Server listening 3333 port and Swagger documentation on http://localhost:3333/api.
 
 ```bash
 
-# watch dev mode
+# --watch dev mode
 
+$ npm run db:dev:up
+
+# then this to restart db when you need it
 $ npm run db:dev:restart
 
 $ npm run start:dev
+
+# remove db when you end
+$ npm run db:dev:rm
 
 ```
 
@@ -43,9 +49,15 @@ I wrote some e2e tests to test all REST API.
 
 # e2e tests
 
+$ npm run db:test:up
+
+# then this to restart test db when you need it
 $ npm run pretest:e2e
 
 $ npm run test:e2e
+
+# remove test db when you end
+$ npm run db:test:rm
 
 ```
 
